@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>INCORE · Flipbook</title>
+<style>
+:root{--azul:#00AAFA;--naranja:#FC7C00;--gris:#7E83A4;--claro:#F5F7FA;--oscuro:#021222;color-scheme:light}
+*{box-sizing:border-box}body{margin:0;background:var(--claro);color:var(--oscuro);font:16px system-ui,"Segoe UI",Arial,sans-serif}
+header{background:var(--oscuro);color:#fff;padding:14px max(16px,4vw);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.identidad{display:flex;gap:14px;align-items:center}.logo{width:175px;max-height:64px;object-fit:contain}.logo-fallback{font-size:26px;font-weight:900}.logo-fallback span:first-child{color:var(--azul)}.logo-fallback span:last-child{color:var(--naranja)}
+.heading small{display:block;color:#d5e2ef;line-height:1.35;margin-top:3px}.label{color:#d5e2ef;font-size:12px}main{max-width:1500px;margin:0 auto;padding:16px}
+.bar{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;align-items:center;margin:0 0 14px}
+button{background:var(--azul);color:white;padding:11px 14px;border:0;border-radius:9px;font:700 14px system-ui;cursor:pointer}button.secondary{background:#65728a}button.accent{background:var(--naranja)}button:disabled{opacity:.4;cursor:not-allowed}button:focus-visible{outline:3px solid var(--naranja);outline-offset:2px}
+#counter{font-weight:700;white-space:nowrap;padding:0 6px}
+.view{background:#dce6f0;border-radius:16px;min-height:70vh;padding:20px;overflow:auto;text-align:center}
+#page{display:block;margin:0 auto;width:min(100%,820px);height:auto;box-shadow:0 11px 30px #02122233;transform-origin:top center;background:white}
+#warning{display:none;color:#b42318;background:#fff1f0;border:1px solid #ffb2ab;border-radius:8px;padding:12px;margin:12px auto;max-width:760px}
+#nav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;padding:14px 0}#nav button{background:#e6edf5;color:var(--oscuro);min-width:36px}#nav button.active{background:var(--naranja);color:white}
+footer{text-align:center;color:#627082;font-size:12px;padding:0 15px 24px}
+@media(max-width:690px){.logo{width:135px}.label{display:none}.view{padding:7px;min-height:55vh}.bar{gap:5px}button{padding:9px 10px;font-size:12px}}
+</style>
+<script src="config.js"></script>
+</head>
+<body>
+<header><div class="identidad"><img id="logo" class="logo" alt="INCORE Knowledge Studio"><div id="logoFallback" class="logo-fallback" hidden><span>IN</span><span>CORE</span></div><div class="heading"><b id="title"></b><small id="subtitle"></small></div></div><span class="label">INCORE Flipbook Viewer v2.1 · Local y web</span></header>
+<main>
+<div class="bar" role="toolbar" aria-label="Navegación del libro"><button id="prev" class="secondary" type="button">❮ Anterior</button><span id="counter" aria-live="polite"></span><button id="next" type="button">Siguiente ❯</button><button id="less" class="secondary" type="button">− Zoom</button><button id="reset" class="secondary" type="button">100%</button><button id="more" class="secondary" type="button">+ Zoom</button><button id="full" class="accent" type="button">Pantalla completa</button></div>
+<div class="view" id="view"><div id="warning" role="alert"></div><img id="page" alt="Página del boletín"></div><nav id="nav" aria-label="Ir a página"></nav></main><footer id="footer"></footer>
+<script>
+(()=>{'use strict';
+const c=window.INCORE_CONFIG, $=id=>document.getElementById(id);
+if(!c||!Number.isInteger(c.totalPaginas)||c.totalPaginas<1||c.totalPaginas>500){$('warning').style.display='block';$('warning').textContent='Configuración inválida: compruebe config.js y totalPaginas (1–500).';return}
+const colors=c.colores||{};
+for(const [key,css] of Object.entries({azul:'--azul',naranja:'--naranja',gris:'--gris',fondoClaro:'--claro',fondoOscuro:'--oscuro'})){
+ const v=colors[key]; if(typeof v==='string'&&/^#[0-9a-fA-F]{6}$/.test(v))document.documentElement.style.setProperty(css,v);
+}
+$('title').textContent=c.titulo||'Boletín Técnico'; $('subtitle').textContent=c.subtitulo||''; $('footer').textContent=c.autor||'INCORE Knowledge Studio';
+$('logo').src=c.logo||'assets/logo-incore.png';$('logo').onerror=()=>{$('logo').hidden=true;$('logoFallback').hidden=false};
+let current=0,scale=1;
+const safeFolder=String(c.carpetaImagenes||'imagenes').replace(/^\/+|\/+$/g,'');
+const src=i=>`${safeFolder}/${c.prefijoPagina||'pagina_'}${String(i+1).padStart(2,'0')}.${c.extension||'png'}`;
+$('page').onerror=()=>{$('warning').style.display='block';$('warning').textContent=`No se encontró la imagen de la página ${current+1}: ${src(current)}. Revise nombres y carpeta imagenes/`;};
+$('page').onload=()=>{$('warning').style.display='none';};
+function update(){ $('page').src=src(current);$('page').style.transform=`scale(${scale})`;$('counter').textContent=`Página ${current+1} de ${c.totalPaginas}`;$('prev').disabled=current===0;$('next').disabled=current===c.totalPaginas-1;[...$('nav').children].forEach((b,i)=>{b.classList.toggle('active',i===current);b.setAttribute('aria-current',i===current?'page':'false')});}
+for(let i=0;i<c.totalPaginas;i++){let b=document.createElement('button');b.type='button';b.textContent=i+1;b.title=`Ir a página ${i+1}`;b.onclick=()=>{current=i;update()};$('nav').append(b)}
+$('prev').onclick=()=>{if(current>0){current--;update()}};$('next').onclick=()=>{if(current<c.totalPaginas-1){current++;update()}};
+function setZoom(z){scale=Math.min(2,Math.max(.6,Math.round(z*10)/10));$('page').style.transform=`scale(${scale})`;$('reset').textContent=Math.round(scale*100)+'%'}
+$('more').onclick=()=>setZoom(scale+.1);$('less').onclick=()=>setZoom(scale-.1);$('reset').onclick=()=>setZoom(1);
+$('full').onclick=()=>{if(document.fullscreenElement){document.exitFullscreen?.()}else{document.documentElement.requestFullscreen?.()}};
+document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return;if(e.key==='ArrowLeft')$('prev').click();if(e.key==='ArrowRight')$('next').click()});
+update();
+})();
+</script>
+</body></html>
