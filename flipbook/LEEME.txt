@@ -1,15 +1,12 @@
-INCORE Flipbook Viewer v2.2.1 — Revisión de desplazamiento y pantalla completa
+INCORE Flipbook Viewer v2.2.2 — Optimización responsive
 
-CAMBIOS RESPECTO A v2.2
-- Modo normal: una sola barra vertical, la del navegador.
-- Pantalla completa: una sola barra de desplazamiento dentro del visor, sin scroll del documento.
-- Conservados navegación, zoom, ajustar ancho/página y responsive.
-- Sin alteraciones en las seis imágenes, el logo ni config.js.
+Paquete LIGERO: no incluye las seis láminas.
 
-USO
-1. Extraiga el ZIP completo en una nueva carpeta.
-2. Abra index.html en Edge para comprobar su funcionamiento en laptop.
-3. Pruebe Ajustar ancho, pantalla completa, zoom y las seis páginas.
-4. NO reemplace la publicación v2.1 hasta validar laptop, tablet y móvil.
+1. Respalda tu carpeta local de pruebas v2.2.1 si lo deseas.
+2. Copia index.html, config.js, LEEME.txt y assets/ a la carpeta local de trabajo.
+3. Conserva imagenes/pagina_01.png hasta pagina_06.png.
+4. Abre index.html en Edge y verifica navegación en móvil, tablet y laptop.
+5. NO subas a GitHub hasta finalizar las pruebas.
 
-NOTA: el visor es estático y los recursos usan rutas relativas.
+Cambios: barra de navegación móvil en dos filas, herramientas compactas con títulos accesibles; tablet con controles reorganizados; laptop conserva controles completos.
+No se modificaron config.js, el logotipo ni las seis láminas.
