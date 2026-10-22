@@ -1,4 +1,4 @@
-// INCORE Flipbook Viewer v2.1 — EDITE SOLO ESTE ARCHIVO PARA NUEVOS LIBROS.
+// INCORE Flipbook Viewer v2.2 — EDITE SOLO ESTE ARCHIVO PARA NUEVOS LIBROS.
 window.INCORE_CONFIG = {
   titulo: "Libros interactivos tipo Flipbook",
   subtitulo: "Guía práctica para crear y publicar un libro interactivo",

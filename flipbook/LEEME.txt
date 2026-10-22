@@ -1,21 +1,15 @@
-INCORE FLIPBOOK VIEWER v2.1 — PLANTILLA MAESTRA
+INCORE Flipbook Viewer v2.2.1 — Revisión de desplazamiento y pantalla completa
 
-1. Descomprima este ZIP en Documentos.
-2. Abra la carpeta INCORE_Flipbook_Plantilla_Maestra_v2_1.
-3. Haga doble clic en index.html para probar el ejemplo de seis láminas en Edge.
-4. Para otro boletín, COPIE la carpeta completa y cambie el nombre de la copia.
-5. Sustituya las imágenes dentro de imagenes/ por pagina_01.png, pagina_02.png, etc.
-6. Abra config.js en Bloc de notas y cambie titulo, subtitulo, totalPaginas y los colores si hace falta.
-7. Coloque el logotipo en assets/logo-incore.png; si mantiene el actual, no debe cambiar nada.
-8. No necesita modificar index.html si mantiene los nombres y formato de las imágenes.
-9. Para GitHub Pages, suba los contenidos de la carpeta a una subcarpeta propia del repositorio.
-10. IMPORTANTE: esta plantilla de prueba NO modifica ningún sitio web publicado.
+CAMBIOS RESPECTO A v2.2
+- Modo normal: una sola barra vertical, la del navegador.
+- Pantalla completa: una sola barra de desplazamiento dentro del visor, sin scroll del documento.
+- Conservados navegación, zoom, ajustar ancho/página y responsive.
+- Sin alteraciones en las seis imágenes, el logo ni config.js.
 
-ESTRUCTURA:
- index.html                 visor (mantener)
- config.js                  configuración del boletín
- imagenes/pagina_01.png... páginas
- assets/logo-incore.png     logotipo
+USO
+1. Extraiga el ZIP completo en una nueva carpeta.
+2. Abra index.html en Edge para comprobar su funcionamiento en laptop.
+3. Pruebe Ajustar ancho, pantalla completa, zoom y las seis páginas.
+4. NO reemplace la publicación v2.1 hasta validar laptop, tablet y móvil.
 
-Puede cambiar extensión a jpg o webp en config.js si todas las páginas usan ese mismo formato.
-El zoom es visual; no aumenta la nitidez original de las imágenes.
+NOTA: el visor es estático y los recursos usan rutas relativas.
