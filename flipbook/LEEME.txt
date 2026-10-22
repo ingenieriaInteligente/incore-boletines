@@ -1,12 +1,13 @@
-INCORE Flipbook Viewer v2.2.2 — Optimización responsive
+INCORE Flipbook Viewer v2.2.3 — Corrección de cabecera móvil
 
-Paquete LIGERO: no incluye las seis láminas.
+CAMBIO: en pantallas de hasta 600 px, el logo y el título se muestran en una primera fila; el identificador técnico de versión pasa a una segunda fila discreta, sin superponer textos. El subtítulo sigue oculto en móvil, como en v2.2.2.
+SIN CAMBIOS: navegación, zoom, pantalla completa, diseño de controles en dos filas, config.js, logo e imágenes.
 
-1. Respalda tu carpeta local de pruebas v2.2.1 si lo deseas.
-2. Copia index.html, config.js, LEEME.txt y assets/ a la carpeta local de trabajo.
-3. Conserva imagenes/pagina_01.png hasta pagina_06.png.
-4. Abre index.html en Edge y verifica navegación en móvil, tablet y laptop.
-5. NO subas a GitHub hasta finalizar las pruebas.
+INSTALACIÓN LIGERA:
+1. Extraer este ZIP.
+2. Copiar index.html, config.js y LEEME.txt en la carpeta local actual del visor; conservar imágenes/ con las seis láminas.
+3. Conservar assets/logo-incore.png (incluido).
+4. Abrir index.html en Microsoft Edge.
+5. Probar primero móvil vertical tras publicar, y luego regresión en tablet y laptop.
 
-Cambios: barra de navegación móvil en dos filas, herramientas compactas con títulos accesibles; tablet con controles reorganizados; laptop conserva controles completos.
-No se modificaron config.js, el logotipo ni las seis láminas.
+No subir a GitHub hasta validar la versión local y disponer de respaldo de la versión pública.

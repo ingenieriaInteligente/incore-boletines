@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#021222"><title>INCORE · Flipbook Viewer v2.2.2</title>
+<meta name="theme-color" content="#021222"><title>INCORE · Flipbook Viewer v2.2.3</title>
 <style>
 :root{--azul:#00AAFA;--naranja:#FC7C00;--gris:#7E83A4;--claro:#F5F7FA;--oscuro:#021222;--tools:#65728a;--stage:#dce6f0;color-scheme:light}
 *{box-sizing:border-box}html{scroll-behavior:auto}body{margin:0;background:var(--claro);color:var(--oscuro);font:16px system-ui,"Segoe UI",Arial,sans-serif}
@@ -32,10 +32,13 @@ button.secondary{background:var(--tools)}button.accent{background:var(--naranja)
  .index{padding:8px 0}
 }
 @media(max-width:600px){
- .site-head{padding:8px 10px;min-height:0}
- .brand{gap:8px}
- .logo{width:96px;max-height:44px}
- .heading strong{font-size:13px;line-height:1.15}
+ /* Cabecera movil: el identificador tecnico ocupa su propia fila; nunca invade el titulo. */
+ .site-head{padding:8px 10px;min-height:0;display:grid;grid-template-columns:minmax(0,1fr);gap:4px;align-items:start}
+ .brand{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px;align-items:center;width:100%;min-width:0}
+ .logo{width:96px;max-height:44px;max-width:100%}
+ .heading{min-width:0;overflow-wrap:anywhere}
+ .heading strong{font-size:13px;line-height:1.2}
+ .label{display:block;justify-self:end;min-width:0;max-width:100%;font-size:10px;line-height:1.2;text-align:right;white-space:normal;overflow-wrap:anywhere}
  .heading small{display:none}
  main{padding:6px 5px 16px}
  .toolbar{display:flex;flex-direction:column;gap:5px;margin-bottom:6px}
@@ -55,6 +58,7 @@ button.secondary{background:var(--tools)}button.accent{background:var(--naranja)
  .page-shell{justify-content:center}
 }
 @media(max-width:380px){
+ .brand{grid-template-columns:88px minmax(0,1fr)}
  .logo{width:88px}
  .heading strong{font-size:12px}
  .reader-actions{grid-template-columns:repeat(5,minmax(0,1fr))}
@@ -84,7 +88,7 @@ html:fullscreen .page-shell{min-height:100%}
 <script src="config.js"></script>
 </head>
 <body>
-<header class="site-head"><div class="brand"><img id="logo" class="logo" alt="INCORE Knowledge Studio"><div id="logoFallback" class="logo-fallback" hidden><span>IN</span><span>CORE</span></div><div class="heading"><strong id="title">Boletín Técnico</strong><small id="subtitle"></small></div></div><span class="label">INCORE Flipbook Viewer v2.2.2 · Responsive</span></header>
+<header class="site-head"><div class="brand"><img id="logo" class="logo" alt="INCORE Knowledge Studio"><div id="logoFallback" class="logo-fallback" hidden><span>IN</span><span>CORE</span></div><div class="heading"><strong id="title">Boletín Técnico</strong><small id="subtitle"></small></div></div><span class="label">INCORE Flipbook Viewer v2.2.3 · Responsive</span></header>
 <main>
 <section class="toolbar" role="toolbar" aria-label="Controles del libro">
  <div class="primary-actions"><button class="secondary" id="prev" type="button">❮ Anterior</button><span id="counter" aria-live="polite">Página 1</span><button id="next" type="button">Siguiente ❯</button></div>
