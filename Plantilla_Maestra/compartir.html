@@ -15,7 +15,11 @@
 <meta name="twitter:title" content="Plantilla maestra reutilizable | Boletín técnico INCORE">
 <meta name="twitter:description" content="Conoce cómo crear y reutilizar una plantilla maestra para boletines interactivos tipo Flipbook.">
 <meta name="twitter:image" content="https://ingenieriainteligente.github.io/incore-boletines/Plantilla_Maestra/assets/portada-social-494dc561644ea4e5.jpg">
-<style>*{box-sizing:border-box}body{margin:0;background:#021222;color:#fff;font:16px system-ui,Segoe UI,Arial,sans-serif;min-height:100vh;display:grid;place-items:center;padding:18px}.card{width:min(100%,720px);text-align:center}img{display:block;width:100%;border-radius:12px}.button{display:inline-block;background:#FC7C00;color:#021222;padding:12px 22px;font-weight:700;text-decoration:none;border-radius:9px;margin-top:15px}p{color:#b5d0e3}</style>
-</head><body><main class="card"><a href="./" aria-label="Abrir boletín"><img src="assets/portada-social.jpg" alt="Plantilla maestra reutilizable | Boletín técnico INCORE"></a><h1>Plantilla maestra reutilizable | Boletín técnico INCORE</h1><p>Abriendo el boletín interactivo…</p><a class="button" href="./">Abrir boletín</a></main>
-<script>window.location.replace('./');</script>
+<script>
+// Redireccion temprana: no cargar imagenes ni mostrar la tarjeta social.
+// El rastreador de Meta lee las etiquetas OG del head sin ejecutar JS.
+window.location.replace('./');
+</script>
+</head><body>
+<noscript><p>Para abrir el boletin, <a href="./">haz clic aqui</a>.</p></noscript>
 </body></html>
