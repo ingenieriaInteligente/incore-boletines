@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#021222"><title>INCORE · Flipbook Viewer v2.2.3</title>
+<meta name="theme-color" content="#021222"><title>INCORE · Flipbook Viewer v2.2.4</title>
 <style>
 :root{--azul:#00AAFA;--naranja:#FC7C00;--gris:#7E83A4;--claro:#F5F7FA;--oscuro:#021222;--tools:#65728a;--stage:#dce6f0;color-scheme:light}
 *{box-sizing:border-box}[hidden]{display:none!important}html{scroll-behavior:auto}body{margin:0;background:var(--claro);color:var(--oscuro);font:16px system-ui,"Segoe UI",Arial,sans-serif}
@@ -20,6 +20,7 @@ button.secondary{background:var(--tools)}button.accent{background:var(--naranja)
 #warning{display:none;background:#fff1f0;border:1px solid #ed9c96;color:#a11d1d;padding:14px;border-radius:10px;margin:0 auto 12px;max-width:720px}
 .index{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:14px 0}.index button{background:#e5edf6;color:var(--oscuro);min-width:44px}.index button.active{background:var(--naranja);color:white}
 .hint{font-size:12px;color:#526278;text-align:center;margin:4px auto 12px}
+.author-footer{margin:8px auto 0;padding:12px 16px;background:var(--oscuro);color:#e7edf6;border-radius:9px;max-width:100%;text-align:center;font-size:13px;line-height:1.4;overflow-wrap:anywhere}.author-footer[hidden]{display:none!important}
 /* Controles cortos para tactil; etiquetas completas en escritorio. */
 .mobile-label{display:none}
 @media(max-width:1024px){
@@ -55,6 +56,7 @@ button.secondary{background:var(--tools)}button.accent{background:var(--naranja)
  .hint{font-size:10px;line-height:1.2;margin:4px auto 5px}
  .index{gap:4px;padding:6px 0}
  .index button{min-width:38px;min-height:38px;padding:6px}
+ .author-footer{font-size:11px;padding:8px 9px;margin-top:5px}
  .page-shell{justify-content:center}
 }
 @media(max-width:380px){
@@ -82,13 +84,14 @@ html:fullscreen .toolbar{flex:0 0 auto}
 html:fullscreen .view{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
 html:fullscreen .hint{flex:0 0 auto;margin:5px auto}
 html:fullscreen .index{flex:0 0 auto;padding:5px 0}
+html:fullscreen .author-footer{flex:0 0 auto;margin-top:3px;padding:6px 10px}
 html:fullscreen .page-shell{min-height:100%}
 @media(orientation:landscape) and (max-height:500px){.site-head{padding:6px 12px;min-height:0}.heading small{display:none}}
 </style>
 <script src="config.js"></script>
 </head>
 <body>
-<header class="site-head"><div class="brand"><div class="brand-mark"><img id="logo" class="logo" alt="INCORE Knowledge Studio" hidden><div id="logoFallback" class="logo-fallback" role="img" aria-label="INCORE Knowledge Studio"><span>IN</span><span>CORE</span></div></div><div class="heading"><strong id="title">Boletín Técnico</strong><small id="subtitle"></small></div></div><span class="label">INCORE Flipbook Viewer v2.2.3 · Responsive</span></header>
+<header class="site-head"><div class="brand"><div class="brand-mark"><img id="logo" class="logo" alt="INCORE Knowledge Studio" hidden><div id="logoFallback" class="logo-fallback" role="img" aria-label="INCORE Knowledge Studio"><span>IN</span><span>CORE</span></div></div><div class="heading"><strong id="title">Boletín Técnico</strong><small id="subtitle"></small></div></div><span class="label">INCORE Flipbook Viewer v2.2.4 · Responsive</span></header>
 <main>
 <section class="toolbar" role="toolbar" aria-label="Controles del libro">
  <div class="primary-actions"><button class="secondary" id="prev" type="button">❮ Anterior</button><span id="counter" aria-live="polite">Página 1</span><button id="next" type="button">Siguiente ❯</button></div>
@@ -98,6 +101,7 @@ html:fullscreen .page-shell{min-height:100%}
 <div class="view" id="view" tabindex="0" aria-label="Área desplazable de lectura"><div class="page-shell" id="pageShell"><img id="page" alt="Página del boletín"></div></div>
 <p class="hint">Ajustar página / ancho · Zoom con desplazamiento · Navega con ← → o los números inferiores</p>
 <nav class="index" id="nav" aria-label="Índice de páginas"></nav>
+<footer class="author-footer" id="authorFooter" aria-label="Autoría del boletín" hidden><span id="authorText"></span></footer>
 </main>
 <script>
 (()=>{'use strict';
@@ -106,6 +110,7 @@ function warn(msg){warning.textContent=msg;warning.style.display='block'}
 if(!c||!Number.isInteger(c.totalPaginas)||c.totalPaginas<1||c.totalPaginas>500){warn('Configuración inválida: compruebe config.js y totalPaginas (1–500).');return}
 for(const [k,css] of Object.entries({azul:'--azul',naranja:'--naranja',gris:'--gris',fondoClaro:'--claro',fondoOscuro:'--oscuro'})){const v=c.colores?.[k];if(typeof v==='string'&&/^#[0-9a-fA-F]{6}$/.test(v))document.documentElement.style.setProperty(css,v)}
 $('title').textContent=c.titulo||'Boletín Técnico';$('subtitle').textContent=c.subtitulo||'';
+const author=typeof c.autor==='string'?c.autor.trim():'';$('authorText').textContent=author;$('authorFooter').hidden=!author;
 // Mantener una marca visible: mostrar imagen al cargarla, texto de reserva si falla.
 const logo=$('logo'), logoFallback=$('logoFallback');
 logo.onload=()=>{logo.hidden=false;logoFallback.hidden=true};
