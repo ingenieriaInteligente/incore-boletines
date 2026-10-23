@@ -1,0 +1,23 @@
+INCORE · Vista previa social para Facebook (complemento independiente)
+
+OBJETIVO
+Conservar intactos index.html y config.js de INCORE Flipbook Viewer v2.2.4.
+
+SUBIR A GITHUB
+Repositorio: incore-boletines > carpeta flipbook/
+- compartir.html -> flipbook/compartir.html
+- portada-social.jpg -> flipbook/assets/portada-social.jpg
+
+No reemplazar el index.html existente, ni config.js, ni las laminas de imagenes/.
+
+ENLACE PARA COMPARTIR EN FACEBOOK (IMPORTANTE: no usar el enlace habitual de lectura)
+https://ingenieriainteligente.github.io/incore-boletines/flipbook/compartir.html
+
+ENLACE HABITUAL DE LECTURA (SE CONSERVA)
+https://ingenieriainteligente.github.io/incore-boletines/flipbook/
+
+Después de publicar, visitar https://developers.facebook.com/tools/debug/ , ingresar la URL compartir.html y ejecutar Debug / Scrape Again para validar la tarjeta. Luego pegar ESA URL en una publicación de Facebook, esperar la vista previa clicable y publicar. No adjuntar como fotografía separada.
+
+Esta portada social corresponde al boletín "Plantilla maestra reutilizable" de 8 páginas. Para otro boletín modificar manualmente metadatos en compartir.html y producir otra portada-social.jpg. Facebook obtiene los metadatos del HTML estático, no de config.js, por lo que este paso es necesario sin introducir cambios en el visor.
+
+Nota: el enlace abrirá la página compartir.html y ésta redirigirá al visor del mismo directorio. La imagen de la tarjeta de Facebook no se reproduce como video.
