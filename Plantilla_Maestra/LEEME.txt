@@ -1,0 +1,3 @@
+INCORE Flipbook Viewer v2.2.3 — corrección verificada de cabecera móvil.
+Copie index.html en flipbook/. Mantenga config.js, assets/ e imagenes/ existentes.
+La marca de respaldo se muestra si la imagen no carga.
