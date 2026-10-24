@@ -1,0 +1,26 @@
+INCORE LT500kV · Piloto portada multimedia v0.1
+
+Sustituir ÚNICAMENTE en E:\54_INCORE-BOLETINES\LT500kV_Portada_Video\:
+  - index.html
+  - config.js
+NO sustituir los archivos de Plantilla_Maestra.
+
+Requisitos en la carpeta piloto:
+  assets/logo-incore.png (de la copia existente)
+  videos/Portada_Video.mp4 (ya guardado por el usuario)
+  imagenes/pagina_02.png ... pagina_09.png (8 láminas correspondientes al NUEVO boletín).
+
+IMPORTANTE: los 8 PNG de la Plantilla Maestra NO corresponden al contenido nuevo.
+Si aún no se han copiado las 8 láminas definitivas, solo la página 1 funcionará correctamente.
+No es necesario tener pagina_01.png, porque la portada es HTML con video.
+
+PRUEBA GLOBAL LOCAL:
+1. Abrir index.html en Edge.
+2. Página 1: título + video + descripción, reproducir; maximizar/minimizar SOLO video.
+3. Pulsar Siguiente: comprobar que pausa video y muestra pagina_02.png.
+4. Verificar páginas 2–9, zoom, ajustar ancho, pantalla completa del VISOR.
+5. Regresar a 1 y comprobar el reproductor.
+6. No subir a GitHub hasta validar todo.
+
+Estado: código estáticamente revisado. No se ha ejecutado prueba visual en tu laptop.
+Nota: compartir.html y generadores sociales no se han modificado. NO ejecutar GENERAR_COMPARTIR.bat en este piloto hasta configurar su publicación.

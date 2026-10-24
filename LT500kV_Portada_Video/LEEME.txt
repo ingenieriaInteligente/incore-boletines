@@ -1,0 +1,320 @@
+INCORE KNOWLEDGE STUDIO
+MANUAL PASO A PASO — PLANTILLA MAESTRA REUTILIZABLE DE BOLETINES FLIPBOOK
+Visor validado: v2.2.4 | Social Cover Generator validado: v2.0.4
+Actualizado: 23/10/2026 | Aplicación local: Windows + Microsoft Edge
+
+OBJETIVO
+Preparar, visualizar, publicar y compartir boletines técnicos digitales con:
+- Páginas PNG navegables en INCORE Flipbook Viewer.
+- Autoría dinámica desde config.js.
+- Portada social horizontal generada automáticamente (título, primera lámina y autor).
+- Enlace compartible en Facebook que muestre una tarjeta clicable.
+
+REGLA PRINCIPAL — UN SOLO ARCHIVO DE CONFIGURACIÓN MANUAL
+Para los DATOS de cada boletín, edite únicamente config.js. También deberá crear
+las láminas PNG del boletín: estas son recursos de contenido, no configuración.
+El generador crea o reemplaza AUTOMÁTICAMENTE:
+  assets/portada-social.jpg
+  assets/portada-social-[hash].jpg (JPG versionado para redes)
+  compartir.html
+NO edite estos dos archivos manualmente. NO edite index.html ni los scripts
+para personalizar cada proyecto. Los archivos generados se deben subir a GitHub.
+
+00. REQUISITOS PREVIOS
+[ ] Laptop o PC Windows con Microsoft Edge.
+[ ] Node.js instalado; verifique en PowerShell: node --version
+[ ] Windows PowerShell disponible (el generador de portada utiliza PowerShell).
+[ ] Repositorio GitHub existente y GitHub Pages activo.
+[ ] Acceso a internet para publicar y comprobar Facebook.
+[ ] Plantilla maestra respaldada y validada antes de crear otros proyectos.
+
+01. ORGANIZAR LA CARPETA MAESTRA
+Ejemplo de carpeta local:
+E:\54_INCORE-BOLETINES\Plantilla_Maestra\
+  assets\
+    logo-incore.png             (logotipo fijo)
+    portada-social.jpg          (SALIDA GENERADA, no editar manualmente)
+    portada-social-[hash].jpg   (COPIA GENERADA con nombre único por contenido)
+  imagenes\
+    pagina_01.png
+    pagina_02.png
+    ...
+  index.html                    (visor v2.2.4, no modificar)
+  config.js                     (ÚNICO archivo de configuración manual)
+  compartir.html                (SALIDA GENERADA)
+  generar-social.js             (generador social v2.0.4)
+  generar-portada.ps1           (motor de composición PowerShell)
+  GENERAR_COMPARTIR.bat         (ejecutor para doble clic)
+  LEEME.txt                     (este manual)
+
+Para un proyecto nuevo:
+1. Copie Plantilla_Maestra a una carpeta con el nombre del boletín,
+   por ejemplo E:\54_INCORE-BOLETINES\Seguridad_Electrica\.
+2. Trabaje en la COPIA; no sobrescriba la plantilla maestra respaldada.
+3. Mantenga los nombres de los scripts y archivos operativos.
+4. El nombre de la carpeta en GitHub debe coincidir con la carpeta configurada
+   en social.carpetaPublicacion (respete mayúsculas, minúsculas y guiones).
+NOTA: El disco puede ser C:, E: u otra unidad. El número 54 no es obligatorio.
+
+02. PREPARAR LAS LÁMINAS
+1. Elabore las páginas del boletín y expórtelas preferentemente como PNG.
+2. Use la misma proporción y buena calidad de imagen en todas las páginas.
+3. Guarde los archivos en imagenes/ con dos dígitos:
+   pagina_01.png, pagina_02.png, ... pagina_08.png.
+4. No deje saltos en la numeración.
+5. Confirme que el número de páginas coincida con totalPaginas en config.js.
+6. La PRIMERA lámina pagina_01.png se utilizará también como miniatura
+   automática de la portada social (sin tener que escogerla manualmente).
+NOTA: Si usa JPG, ajuste extension en config.js y el nombre de cada archivo.
+
+03. EDITAR config.js — DATOS DEL PROYECTO
+1. Abra config.js con Bloc de notas. No cree un config.js.txt por error.
+2. Actualice los campos generales:
+   titulo              = título visible en el visor.
+   subtitulo           = subtítulo visible en el visor.
+   autor               = autor del pie del visor Y de la portada social.
+   totalPaginas        = cantidad real de láminas.
+   carpetaImagenes     = normalmente "imagenes".
+   prefijoPagina       = normalmente "pagina_".
+   extension           = normalmente "png".
+   logo                = normalmente "assets/logo-incore.png".
+3. Actualice el bloque social:
+   social.baseSitio         = URL base de GitHub Pages, terminada en /.
+   social.carpetaPublicacion = nombre EXACTO de la carpeta en GitHub.
+   social.titulo            = título bajo la tarjeta de Facebook.
+   social.tituloPortada     = título grande de la portada (máx. 2 líneas).
+   social.descripcion      = texto breve de la tarjeta social.
+   social.imagen           = "assets/portada-social.jpg".
+4. Conserve los colores INCORE salvo una decisión de diseño distinta.
+5. Guarde el archivo.
+
+EJEMPLO DEL BLOQUE social (para Plantilla_Maestra):
+  social: {
+    baseSitio: "https://ingenieriainteligente.github.io/incore-boletines/",
+    carpetaPublicacion: "Plantilla_Maestra",
+    titulo: "Plantilla maestra reutilizable | Boletín técnico INCORE",
+    tituloPortada: "Plantilla maestra reutilizable",
+    descripcion: "Conoce cómo crear y reutilizar una plantilla maestra para boletines interactivos tipo Flipbook.",
+    imagen: "assets/portada-social.jpg"
+  },
+
+¡IMPORTANTE!
+- social.imagen debe ser una RUTA RELATIVA; NO coloque https://, / inicial,
+  ?v= ni nombres de carpetas superiores en ese campo.
+- tituloPortada es el texto principal de la imagen. No confundir con
+  social.titulo, que corresponde al título de la tarjeta compartida.
+- Una línea precedida por // es un comentario, no una opción activada.
+- La autoría se toma de autor, sin duplicarla en el bloque social.
+- Si el título es demasiado largo para 2 líneas, acórtelo en config.js.
+
+04. GENERAR AUTOMÁTICAMENTE PORTADA Y TARJETA SOCIAL (v2.0.4)
+1. Compruebe junto a config.js:
+   generar-social.js (v2.0.4), generar-portada.ps1 y GENERAR_COMPARTIR.bat.
+2. Compruebe que existan imagenes/pagina_01.png y assets/logo-incore.png.
+3. Compruebe social.imagen: "assets/portada-social.jpg" (ruta relativa).
+4. Guarde config.js y ejecute GENERAR_COMPARTIR.bat (doble clic).
+5. Lea el resultado. Espere mensajes similares a:
+   PASS: Portada social generada: ...\assets\portada-social.jpg
+   PASS: compartir.html generado.
+   URL PARA FACEBOOK: https://.../NOMBRE_CARPETA/compartir.html
+   PORTADA: https://.../assets/portada-social-<hash>.jpg
+   ARCHIVO SOCIAL VERSIONADO: assets/portada-social-<hash>.jpg
+   VERSION DE IMAGEN: <hash>
+   NOTA: <hash> es un identificador del contenido de la imagen; no se escribe a mano.
+6. Si aparece ERROR, detenga la publicación y lea el mensaje antes de cambiar archivos.
+7. Abra assets/portada-social.jpg o su copia versionada para comprobar:
+   [ ] Logo y paleta INCORE.
+   [ ] Título de social.tituloPortada en dos líneas legibles.
+   [ ] Miniatura tomada de imagenes/pagina_01.png.
+   [ ] Autor tomado de config.js, debajo del botón visual "ABRIR BOLETÍN".
+   [ ] Dimensiones 1200 x 630 píxeles.
+   [ ] Nombre y credenciales del autor comprobados antes de difundir.
+8. Abra compartir.html en Bloc de notas y busque og:image.
+   Debe apuntar a portada-social-<hash>.jpg, SIN el antiguo ?v=.
+   og:image:secure_url y twitter:image deben usar el MISMO nombre.
+9. NO copie manualmente pagina_01.png para redes: el generador la usa para
+   componer la imagen y crea automáticamente el JPG versionado.
+10. Si la imagen cambia, habrá un JPG con otro nombre. NO elimine versiones
+    antiguas indiscriminadamente: alguna publicación puede referenciarlas.
+
+DIAGNÓSTICO SOLO SI FALLA EL BAT:
+PowerShell, situado en la carpeta del proyecto:
+  Set-Location "E:\54_INCORE-BOLETINES\Plantilla_Maestra"
+  node .\generar-social.js
+Si aparece ERROR de social.imagen, use la ruta relativa sin URL ni ?v=.
+
+05. PROBAR EL VISOR Y LA REDIRECCIÓN LOCAL
+1. Abra index.html con Edge y verifique cabecera, autor y ocho páginas (o
+   las que establezca totalPaginas), controles y navegación.
+2. Abra compartir.html con Edge. Debe llevar directamente al visor.
+   v2.0.4 realiza window.location.replace('./') en la cabecera <head> y
+   no inserta una imagen de portada en el cuerpo de la página.
+3. Si observa un destello de la portada social, pruebe en Edge InPrivate
+   (Ctrl + Shift + N) para descartar caché o estado de sesión anterior.
+4. La prueba local del redireccionamiento NO demuestra cómo Facebook genera
+   su tarjeta: es una comprobación aparte en Meta.
+5. Si JavaScript está deshabilitado, compartir.html presenta un enlace
+   alternativo para abrir el boletín.
+
+06. PUBLICAR O ACTUALIZAR EN GITHUB
+Sitio de ejemplo: https://github.com/ingenieriainteligente/incore-boletines
+
+NUEVO BOLETÍN:
+1. Entre a GitHub desde Edge e inicie sesión.
+2. Abra el repositorio incore-boletines y compruebe que está en main.
+3. Mediante Add file -> Upload files, suba la carpeta del nuevo proyecto,
+   conservando TODA su estructura relativa.
+4. Antes del commit, compruebe la ubicación de index.html, config.js,
+   compartir.html, assets/ e imagenes/ dentro de la carpeta del proyecto.
+5. Escriba un mensaje descriptivo, por ejemplo:
+   feat: publicar boletin de seguridad electrica
+6. Seleccione Commit directly to the main branch y Commit changes.
+
+ACTUALIZACIÓN DE BOLETÍN EXISTENTE:
+1. Acceda a la carpeta EXACTA del boletín en GitHub.
+2. Si cambió el contenido editorial, suba config.js y las láminas pertinentes.
+3. Si ejecutó el generador social, suba LOS DOS productos de la misma ejecución:
+   - compartir.html a la carpeta del proyecto.
+   - assets/portada-social-<hash>.jpg a assets/ del mismo proyecto.
+4. Suba también assets/portada-social.jpg si desea que la imagen principal
+   publicada refleje la última versión; no es la que usa Meta en v2.0.4.
+5. Suba config.js si su versión pública está desactualizada y cambió.
+6. NO es necesario subir los scripts .js, .ps1 o .bat para servir la página.
+7. NO modifique index.html ni otras páginas cuando solo cambia la tarjeta.
+8. Registre un commit descriptivo, por ejemplo:
+   fix: actualizar portada social versionada
+9. Espere a que GitHub Pages despliegue el nuevo commit antes de probar Meta.
+   Verifique el estado del despliegue en Settings -> Pages o Actions.
+10. Abra directamente la URL pública del NUEVO JPG versionado y asegúrese
+    de que muestra el título, la miniatura y el autor correctos.
+11. Abra el compartir.html publicado (vista de código en GitHub) y compruebe
+    que og:image menciona exactamente el JPG versionado que acaba de subir.
+12. No repita un commit por costumbre: si el cambio no se ve todavía,
+    compruebe primero despliegue, URL y caché del navegador.
+
+ARCHIVOS LOCALES QUE NO SON NECESARIOS PARA SERVIR EL SITIO:
+  generar-social.js, generar-portada.ps1, GENERAR_COMPARTIR.bat.
+No hace falta subirlos a GitHub Pages. LEEME.txt es opcional.
+Evite subir desktop.ini, copias temporales o datos privados.
+
+07. COMPROBAR GITHUB PAGES
+Si Pages ya funciona, conserve Settings -> Pages -> main -> /(root).
+Para el ejemplo Plantilla_Maestra:
+  DIRECCIÓN DEL BOLETÍN:
+  https://ingenieriainteligente.github.io/incore-boletines/Plantilla_Maestra/
+
+  DIRECCIÓN PARA COMPARTIR EN FACEBOOK:
+  https://ingenieriainteligente.github.io/incore-boletines/Plantilla_Maestra/compartir.html
+
+  IMAGEN SOCIAL PUBLICADA PARA META (ejemplo; cambia según contenido):
+  https://ingenieriainteligente.github.io/incore-boletines/Plantilla_Maestra/assets/portada-social-<hash>.jpg
+
+Verifique que el visor abra todas las láminas y que el JPG muestre el título,
+la miniatura y el autor actualizados. NO cambie Custom domain para añadir
+el nombre de una carpeta de proyecto.
+
+08. VERIFICAR LA TARJETA EN META / FACEBOOK
+1. Abra https://developers.facebook.com/tools/debug/
+2. Pegue la URL PÚBLICA que termina en /compartir.html.
+3. Pulse Depurar y, si es necesario, "Volver a extraer".
+4. Revise la vista previa y las propiedades extraídas:
+   [ ] og:url coincide con el proyecto correcto.
+   [ ] og:title y og:description muestran los textos definitivos.
+   [ ] og:image apunta a assets/portada-social-<hash>.jpg, SIN ?v=.
+   [ ] La portada muestra el título, la miniatura y el autor correctos.
+5. Si Meta muestra una versión anterior:
+   a) Compruebe primero que el JPG versionado se abre desde GitHub Pages.
+   b) Revise que el compartir.html publicado usa EXACTAMENTE ese nombre.
+   c) Compruebe que GitHub Pages terminó de desplegar el cambio.
+   d) Solo después vuelva a extraer en el depurador de Meta.
+   e) No suba compartir.html una segunda vez sin encontrar una diferencia.
+6. La advertencia fb:app_id puede aparecer y no impidió las pruebas de este
+   boletín. HTTP 206 tampoco impidió mostrar correctamente la tarjeta.
+7. Las URL canónicas HISTÓRICAS del depurador no sustituyen la actual:
+   compruebe la URL canónica mostrada para la última extracción.
+8. La portada social (incluido "ABRIR BOLETÍN") forma parte del JPG.
+   Facebook hace clicable la tarjeta como un enlace; ese texto no es
+   un botón interactivo dentro de la propia imagen.
+
+09. HACER UNA PUBLICACIÓN DE PRUEBA EN FACEBOOK
+1. Abra Facebook -> Crear publicación.
+2. Configure la audiencia como "Solo yo" para la primera prueba.
+3. Pegue la URL terminada en /compartir.html en el texto del mensaje.
+4. Confirme que Facebook genera la tarjeta con portada y título.
+5. NO use Agregar fotos o videos para esta prueba de tarjeta clicable.
+6. Añada un mensaje breve. Evite repetir la URL dos veces y no utilice
+   asteriscos ** para simular negrita: Facebook podría mostrarlos literales.
+7. Publique con audiencia "Solo yo".
+8. Abra la publicación y pulse cualquier punto de la tarjeta/portada.
+9. Compruebe que se abra el boletín y que las páginas naveguen bien.
+10. Solo después decida cambiar la audiencia a "Público".
+NOTA: "ABRIR BOLETÍN" dibujado DENTRO del JPG es visual; la zona clicable
+real la construye Facebook a partir del enlace compartido.
+
+10. FLUJO MÍNIMO PARA CADA NUEVO PROYECTO
+[ ] Copiar Plantilla_Maestra a nueva carpeta.
+[ ] Preparar imágenes pagina_01, pagina_02, ... .
+[ ] Editar ÚNICAMENTE config.js (datos generales y social).
+[ ] Ejecutar GENERAR_COMPARTIR.bat y verificar mensajes PASS.
+[ ] Revisar portada-social.jpg, el JPG -<hash> y compartir.html con og:image versionado.
+[ ] Probar index.html localmente.
+[ ] Subir proyecto a GitHub y hacer commit.
+[ ] Abrir URL pública del visor.
+[ ] Depurar URL de compartir.html en Meta y validar tarjeta.
+[ ] Publicar primero "Solo yo"; validar clic y navegación.
+[ ] Compartir públicamente cuando el proyecto esté aprobado.
+
+11. SOLUCIÓN DE INCIDENCIAS FRECUENTES
+A. "ERROR: social.imagen debe ser ruta relativa válida..."
+   -> En config.js use: imagen: "assets/portada-social.jpg"
+   -> Sin URL absoluta, sin ?v= y sin / al inicio.
+B. No se genera compartir.html o no aparece portada-social-<hash>.jpg.
+   -> Revise que generar-social.js sea la versión v2.0.4 y ejecute el .bat.
+   -> Si falla, pruebe desde PowerShell con node .\generar-social.js.
+   -> NO suba un compartir.html anterior a GitHub.
+C. PowerShell informa errores en generar-portada.ps1.
+   -> Utilice el script corregido y validado para Windows PowerShell 5.1.
+   -> Evite editarlo manualmente o pegar fragmentos de otras versiones.
+D. La tarjeta muestra textos genéricos de ejemplo.
+   -> Corrija social.titulo, social.tituloPortada y social.descripcion.
+   -> Ejecute de nuevo el generador y publique compartir.html actualizado.
+E. GitHub muestra autor nuevo, Meta muestra portada antigua.
+   -> Verifique que el JPG -<hash>.jpg esté publicado en assets/ y que
+      compartir.html lo referencie. Compruebe despliegue y vuelva a extraer.
+F. Error 404 en Meta o una ruta que indica /flipbook/ para otro proyecto.
+   -> Corrija social.carpetaPublicacion y regenere compartir.html.
+G. Una página del boletín no aparece.
+   -> Compruebe totalPaginas, extensión, numeración y mayúsculas de archivos.
+H. En Meta aparece el código de respuesta 206.
+   -> Significa "Partial Content"; por sí solo no confirma falla o éxito.
+   -> Compruebe que la tarjeta y la navegación real funcionen.
+
+I. Al abrir compartir.html aparece un instante la portada social.
+   -> Compruebe que la versión pública tenga window.location.replace en
+      <head> y NO cargue la imagen en <body>. Pruebe en Edge InPrivate.
+J. Parece necesario subir compartir.html dos veces.
+   -> Compruebe primero el estado de GitHub Pages, el archivo publicado
+      y el JPG de destino. La espera de despliegue y la caché pueden
+      explicar la demora; un segundo envío idéntico no es necesario.
+
+12. ORDEN, MANTENIMIENTO Y RESPALDOS
+- No sobrescriba sin respaldo la carpeta Plantilla_Maestra aprobada.
+- Cada boletín debe tener su propia carpeta local y pública.
+- Mantenga un solo LEEME.txt general; archive instructivos antiguos fuera
+  de la carpeta operativa después de verificar su contenido.
+- La generación social sobrescribe portada-social.jpg y compartir.html,
+  y crea una copia versionada JPG por contenido.
+- Conserve las versiones JPG que estén referenciadas por tarjetas vigentes.
+- Antes de cambios mayores, respalde config.js, los scripts y la imagen anterior.
+- Publique únicamente contenido de uso autorizado. No suba datos privados.
+- Use mensajes de commit claros:
+  feat: nueva función o boletín
+  fix: corregir un error
+  docs: actualizar documentación
+  chore: mantenimiento u organización
+- Esta validación corresponde al caso Plantilla_Maestra con 8 láminas.
+  Para nuevos proyectos, repita la prueba integral antes de difundir.
+- Prueba confirmada en Edge InPrivate: la redirección v2.0.4 abrió el visor
+  sin destello previo; la visualización puede variar según navegador/caché.
+
+FIN DEL MANUAL — INCORE KNOWLEDGE STUDIO
