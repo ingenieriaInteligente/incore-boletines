@@ -13,7 +13,7 @@ window.INCORE_CONFIG = {
     tituloResaltado: "Línea de Transmisión de 500 kV", // Opcional: frase destacada en naranja
     subtitulo: "De la ingeniería a la puesta en servicio",
     encabezadoDescripcion: "Acerca de este boletín",
-    descripcion: "Descubre cómo se integran ingeniería, permisos, logística y construcción para desarrollar una línea de transmisión de 500 kV, con seguridad y control hasta su puesta en servicio.",
+    descripcion: "Construir una línea de transmisión de 500 kV implica mucho mas que instalar torres y conductores. Descubre cómo se integran ingeniería, permisos, logística y construcción para desarrollar una línea de transmisión de 500 kV, con seguridad y control hasta su puesta en servicio.",
     video: "videos/Portada_Video.mp4",
     imagen: "assets/portada.png", // Se usa cuando tipo="imagen"
     etiquetaMedia: "Video de presentación"
@@ -21,7 +21,7 @@ window.INCORE_CONFIG = {
   // Compatibilidad con herramientas previas que leen portadaMultimedia
   portadaMultimedia: {
     video: "videos/Portada_Video.mp4",
-    descripcion: "Descubre cómo se integran ingeniería, permisos, logística y construcción para desarrollar una línea de transmisión de 500 kV, con seguridad y control hasta su puesta en servicio."
+    descripcion: "Construir una línea de transmisión de 500 kV implica mucho mas que instalar torres y conductores. Descubre cómo se integran ingeniería, permisos, logística y construcción para desarrollar una línea de transmisión de 500 kV, con seguridad y control hasta su puesta en servicio."
   },
   carpetaImagenes: "imagenes",
   prefijoPagina: "pagina_",
