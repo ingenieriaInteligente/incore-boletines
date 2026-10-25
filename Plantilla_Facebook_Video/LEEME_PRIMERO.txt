@@ -1,0 +1,21 @@
+INCORE · Plantilla_Facebook_Video · Prototipo v0.2
+
+Proyecto independiente. No altera Plantilla_Maestra ni LT500kV_Portada_Video.
+
+CAMBIOS v0.2
+1. Firma 100% editable en config.js: tratamiento, nombre, credencial.
+   Valores: Ing. Rildo Liden Salazar Buendía | CIP 87144.
+2. Corrección de copias PNG: los archivos de v0.1 incluían una franja de la página siguiente en la zona inferior; se recortó solo esa franja.
+3. Visor: una sola imagen, ajustada íntegramente al área de visualización.
+4. Gestos táctiles: deslizar dedo izquierda = siguiente, derecha = anterior. Mantiene desplazamiento vertical.
+5. Se mantienen botones Anterior / Siguiente / Volver al video.
+6. Video, portada, metadatos experimentales y navegación básica se conservan.
+
+PRUEBA LOCAL
+Extraer ZIP; abrir Plantilla_Facebook_Video/index.html con Edge; comprobar firma y botón IR A BOLETÍN.
+En boletin.html comprobar que pagina_02 y pagina_07 no muestren la siguiente lámina.
+En móvil comprobar gestos laterales.
+
+FACEBOOK
+compartir.html mantiene marcadores REEMPLAZAR_URL_ABSOLUTA_* para prueba futura.
+No publicar aún ni afirmar que el video se reproduce dentro del feed de Facebook.
