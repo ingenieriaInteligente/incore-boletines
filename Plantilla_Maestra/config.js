@@ -4,7 +4,7 @@ window.INCORE_CONFIG = {
   titulo: "Construcción de una Línea de Transmisión de 500 kV",
   subtitulo: "De la ingeniería a la puesta en servicio",
   autor: "Ing. Rildo Liden Salazar Buendía | CIP 87144",
-  totalPaginas: 9,
+  totalPaginas: 8,
   portada: {
     tipo: "video", // Alternativa: "imagen"
     categoria: "BOLETÍN TÉCNICO INTERACTIVO",
