@@ -1,4 +1,4 @@
-// PLANTILLA FACEBOOK VIDEO · DATOS EDITABLES v0.3
+// PLANTILLA FACEBOOK VIDEO · DATOS EDITABLES v0.4
 // Modificar únicamente estos valores para reutilizar la plantilla.
 window.INCORE_CONFIG = {
   titulo: "Construcción de una Línea de Transmisión de 500 kV",
