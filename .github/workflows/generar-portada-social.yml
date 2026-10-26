@@ -1,0 +1,61 @@
+name: INCORE | Validar portada social 4x5
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'Plantilla_Facebook_Video/videos/**'
+      - 'Plantilla_Facebook_Video/imagenes/pagina_01.png'
+      - 'Plantilla_Facebook_Video/config.js'
+      - 'Plantilla_Facebook_Video/generar_portada_social.py'
+      - '.github/workflows/generar-portada-social.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  generar-y-validar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Obtener repositorio
+        uses: actions/checkout@v4
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar dependencias
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install --disable-pip-version-check opencv-python-headless pillow
+      - name: Generar portada social
+        working-directory: Plantilla_Facebook_Video
+        run: python generar_portada_social.py
+      - name: Validar archivos y dimensiones
+        working-directory: Plantilla_Facebook_Video
+        run: |
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          base=Path('assets/portada-base.png')
+          final=Path('assets/portada-social-facebook.png')
+          for f in (base,final):
+              if not f.is_file() or f.stat().st_size == 0:
+                  raise SystemExit(f'FAIL: no se generó {f}')
+              with Image.open(f) as im:
+                  if im.size != (1080,1350):
+                      raise SystemExit(f'FAIL: {f} tiene {im.size}, no 1080x1350')
+          print('PASS: portada base y social 4:5 (1080x1350)')
+          PY
+      - name: Descargar resultado de la prueba
+        uses: actions/upload-artifact@v4
+        with:
+          name: incore-portada-social-prueba
+          path: |
+            Plantilla_Facebook_Video/assets/portada-base.png
+            Plantilla_Facebook_Video/assets/portada-social-facebook.png
+            Plantilla_Facebook_Video/compartir.html
+          if-no-files-found: error
+          retention-days: 7
