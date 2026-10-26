@@ -7,7 +7,7 @@ window.INCORE_CONFIG = {
   video: "videos/presentacion.mp4",
 
   portadaSocial: {
-    modo: "AUTO", // AUTO | PERSONALIZADA
+    modo: "PERSONALIZADA", // AUTO | PERSONALIZADA
     imagen: "assets/portada-social-facebook.png",
     imagenPersonalizada: "assets/portada-personalizada.png",
     base: "assets/portada-base.png",
