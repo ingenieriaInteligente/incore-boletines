@@ -1,4 +1,4 @@
-// INCORE · Plantilla_Facebook_Video · v0.5.5
+// INCORE · Plantilla_Facebook_Video · v0.5.6
 // Conserva el contrato de configuración usado por app.js.
 window.INCORE_CONFIG = {
   titulo: "Construcción de una Línea de Transmisión de 500 kV",
@@ -23,7 +23,12 @@ window.INCORE_CONFIG = {
     muestrasRespaldo: 32,
     tituloAnchoPorcentaje: 65,
     tituloMaxLineas: 3,
-    miniaturaEscala: 1.24
+    miniaturaEscala: 1.24,
+    oscurecimiento: {
+      modo: "LOCALIZADO", // LOCALIZADO | UNIFORME | NINGUNO
+      intensidadTitulo: 40, // porcentaje maximo de oscurecimiento (0-100)
+      intensidadResto: 5 // porcentaje minimo en otras zonas (0-100)
+    }
   },
 
   firma: {

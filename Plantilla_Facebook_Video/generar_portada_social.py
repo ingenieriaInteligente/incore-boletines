@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""INCORE v0.5.5 · Portada 4:5 AUTO/PERSONALIZADA para GitHub Actions."""
+"""INCORE v0.5.6 · Portada 4:5 AUTO/PERSONALIZADA para GitHub Actions."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -56,6 +56,7 @@ if not config_path.is_file():
 source = config_path.read_text(encoding="utf-8")
 cover_cfg = section(source, "portadaSocial")
 pub_cfg = section(source, "publicar")
+shade_cfg = section(source, "oscurecimiento")
 TITLE = string(source, "titulo", "Boletín técnico INCORE")
 HIGHLIGHT = string(source, "tituloResaltado", "")
 MODE = string(cover_cfg, "modo", "AUTO").upper()
@@ -75,6 +76,9 @@ BACKUP_SAMPLES = max(4, min(100, int(number(cover_cfg, "muestrasRespaldo", 32)))
 TITLE_WIDTH_PCT = max(40, min(90, number(cover_cfg, "tituloAnchoPorcentaje", 65)))
 MAX_LINES = max(1, min(5, int(number(cover_cfg, "tituloMaxLineas", 3))))
 THUMB_SCALE = max(.7, min(1.3, number(cover_cfg, "miniaturaEscala", 1.24)))
+SHADE_MODE = string(shade_cfg, "modo", "LOCALIZADO").upper()
+SHADE_TITLE = max(0, min(100, number(shade_cfg, "intensidadTitulo", 40)))
+SHADE_REST = max(0, min(100, number(shade_cfg, "intensidadResto", 5)))
 BASE_URL = string(pub_cfg, "baseUrl", "https://ingenieriainteligente.github.io/incore-boletines/Plantilla_Facebook_Video/").rstrip("/") + "/"
 
 for path in (BASE, FINAL):
@@ -304,12 +308,41 @@ def rounded_thumbnail(im):
 def generate_final():
     with Image.open(BASE) as raw:
         im = raw.convert("RGBA")
-    overlay = Image.new("RGBA", im.size, (0, 0, 0, 0))
-    d = ImageDraw.Draw(overlay)
-    for y in range(H):
-        alpha = min(225, int(42 + 170 * max(0, 1 - y / 720)))
-        d.line((0, y, W, y), fill=(2, 18, 34, alpha))
-    im = Image.alpha_composite(im, overlay)
+    # Oscurecimiento editorial configurable, sin modificar la foto original.
+    # LOCALIZADO: maximo en esquina superior izquierda, desaparece gradualmente.
+    # UNIFORME: aplicar intensidadTitulo a toda la foto.
+    # NINGUNO: foto intacta.
+    if SHADE_MODE not in ("LOCALIZADO", "UNIFORME", "NINGUNO"):
+        fail(f"oscurecimiento.modo invalido: {SHADE_MODE}")
+    if SHADE_MODE != "NINGUNO":
+        from PIL import ImageChops
+        if SHADE_MODE == "UNIFORME":
+            alpha = round(255 * SHADE_TITLE / 100)
+            overlay = Image.new("RGBA", im.size, (2, 18, 34, alpha))
+        else:
+            # Gradiente espacial: oscuro bajo el titulo, y casi transparente abajo/derecha.
+            # Un rectangulo del titulo ocupa aprox. x=42..750 e y=112..340.
+            # La influencia disminuye suavemente en X y en Y.
+            alpha_map = Image.new("L", im.size)
+            base_a = 255 * SHADE_REST / 100
+            diff_a = 255 * (SHADE_TITLE - SHADE_REST) / 100
+            # Calculo a resolucion reducida para evitar lentitud en GitHub Actions.
+            sw, sh = 270, 338
+            low = Image.new("L", (sw, sh))
+            px = low.load()
+            for yy in range(sh):
+                y = yy * H / sh
+                fy = max(0.0, 1.0 - max(0.0, y - 80) / 560) ** 1.4
+                for xx in range(sw):
+                    x = xx * W / sw
+                    fx = max(0.0, 1.0 - max(0.0, x - 300) / 690) ** 0.8
+                    a = base_a + diff_a * fx * fy
+                    px[xx, yy] = int(max(0, min(255, a)))
+            alpha_map = low.resize((W, H), Image.Resampling.BILINEAR)
+            overlay = Image.new("RGBA", im.size, (2, 18, 34, 0))
+            overlay.putalpha(alpha_map)
+        im = Image.alpha_composite(im, overlay)
+    print(f"OSCURECIMIENTO | {SHADE_MODE} | titulo={SHADE_TITLE:.0f}% | resto={SHADE_REST:.0f}%")
     draw = ImageDraw.Draw(im)
     draw.text((42, 42), "INCORE · BOLETÍN TÉCNICO", font=font(26), fill=AZUL)
     draw_title(draw)
