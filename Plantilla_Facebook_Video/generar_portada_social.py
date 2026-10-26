@@ -298,16 +298,21 @@ def generate_final():
 
 
 def update_og():
+    """Actualizar o incorporar meta Open Graph sin duplicar propiedades."""
     path = ROOT / "compartir.html"
     if not path.is_file():
         fail("no existe compartir.html")
     html = path.read_text(encoding="utf-8")
+
     def escape(value):
-        return value.replace("&", "&amp;").replace('"', "&quot;").replace("<", "&lt;")
+        return (str(value).replace("&", "&amp;")
+                .replace('"', "&quot;").replace("<", "&lt;"))
+
     try:
         image_rel = FINAL.relative_to(ROOT).as_posix()
     except ValueError:
         fail("ruta final fuera del proyecto")
+
     fields = {
         "og:title": TITLE,
         "og:url": BASE_URL + "compartir.html",
@@ -315,12 +320,31 @@ def update_og():
         "og:image:width": str(W),
         "og:image:height": str(H),
     }
-    for key, val in fields.items():
-        pattern = r'(<meta\s+property=["\']' + re.escape(key) + r'["\']\s+content=["\'])([^"\']*)(["\'])'
-        html, count = re.subn(pattern, lambda m: m.group(1) + escape(val) + m.group(3), html, count=1)
-        if count != 1:
-            fail(f"etiqueta {key} no encontrada en compartir.html")
+    # Reconoce etiquetas meta en cualquier orden de atributos y con comillas simples/dobles.
+    meta_pattern = re.compile(r"<meta\b[^>]*>", flags=re.IGNORECASE)
+    property_pattern = re.compile(r"\bproperty\s*=\s*([\"'])(.*?)\1", flags=re.IGNORECASE)
+
+    for key, value in fields.items():
+        new_tag = f'<meta property="{key}" content="{escape(value)}">'
+        matches = []
+        for match in meta_pattern.finditer(html):
+            attr = property_pattern.search(match.group())
+            if attr and attr.group(2).lower() == key.lower():
+                matches.append((match.start(), match.end()))
+        if matches:
+            # Sustituir la primera etiqueta y eliminar posibles duplicados.
+            for start, end in reversed(matches[1:]):
+                html = html[:start] + html[end:]
+            start, end = matches[0]
+            html = html[:start] + new_tag + html[end:]
+        else:
+            head = re.search(r"<head\b[^>]*>", html, flags=re.IGNORECASE)
+            if not head:
+                fail("no se encontró <head> en compartir.html")
+            html = html[:head.end()] + "\n" + new_tag + html[head.end():]
+
     path.write_text(html, encoding="utf-8")
+    print("PASS | metadatos Open Graph actualizados/creados")
 
 
 def main():
