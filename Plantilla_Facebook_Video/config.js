@@ -1,4 +1,4 @@
-// INCORE · Plantilla_Facebook_Video · v0.5.4
+// INCORE · Plantilla_Facebook_Video · v0.5.5
 // Conserva el contrato de configuración usado por app.js.
 window.INCORE_CONFIG = {
   titulo: "Construcción de una Línea de Transmisión de 500 kV",
@@ -14,7 +14,13 @@ window.INCORE_CONFIG = {
     miniaturaBoletin: "imagenes/pagina_01.png",
     formato: "4:5",
     mostrarPlay: true,
-    priorizarAccion: true, // heurística de movimiento, no detección semántica de trabajadores
+    priorizarAccion: true, // movimiento estimado, NO detección semántica
+    priorizarInicio: true, // revisar primero el tramo inicial para todos los boletines
+    inicioDesdePorcentaje: 5, // porcentaje de duración; configurable por proyecto
+    inicioHastaPorcentaje: 38,
+    calidadMinimaInicio: 70, // evita fotogramas borrosos u oscuros
+    muestrasInicio: 24,
+    muestrasRespaldo: 32,
     tituloAnchoPorcentaje: 65,
     tituloMaxLineas: 3,
     miniaturaEscala: 1.24

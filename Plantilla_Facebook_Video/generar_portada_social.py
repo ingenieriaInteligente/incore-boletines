@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""INCORE v0.5.4 · Portada 4:5 AUTO/PERSONALIZADA para GitHub Actions."""
+"""INCORE v0.5.5 · Portada 4:5 AUTO/PERSONALIZADA para GitHub Actions."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -66,6 +66,12 @@ FINAL = ROOT / string(cover_cfg, "imagen", "assets/portada-social-facebook.png")
 THUMB = ROOT / string(cover_cfg, "miniaturaBoletin", "imagenes/pagina_01.png")
 SHOW_PLAY = boolean(cover_cfg, "mostrarPlay", True)
 ACTION = boolean(cover_cfg, "priorizarAccion", True)
+PREFER_EARLY = boolean(cover_cfg, "priorizarInicio", True)
+EARLY_FROM = max(0.0, min(90.0, number(cover_cfg, "inicioDesdePorcentaje", 5))) / 100
+EARLY_TO = max(EARLY_FROM + .01, min(100.0, number(cover_cfg, "inicioHastaPorcentaje", 38))) / 100
+MIN_EARLY_QUALITY = number(cover_cfg, "calidadMinimaInicio", 70)
+EARLY_SAMPLES = max(4, min(100, int(number(cover_cfg, "muestrasInicio", 24))))
+BACKUP_SAMPLES = max(4, min(100, int(number(cover_cfg, "muestrasRespaldo", 32))))
 TITLE_WIDTH_PCT = max(40, min(90, number(cover_cfg, "tituloAnchoPorcentaje", 65)))
 MAX_LINES = max(1, min(5, int(number(cover_cfg, "tituloMaxLineas", 3))))
 THUMB_SCALE = max(.7, min(1.3, number(cover_cfg, "miniaturaEscala", 1.24)))
@@ -130,19 +136,38 @@ def generate_base():
         fail("no se pudieron leer FPS y duración")
     duration = frames / fps
     best = None
-    # 32 instantes entre el 10 y 90 %, sin depender de una posición fija.
-    for i in range(32):
-        t = duration * (.10 + .80 * i / 31)
+    def choose_candidate(t):
         cap.set(cv2.CAP_PROP_POS_MSEC, t * 1000)
         ok, frame = cap.read()
         if not ok:
-            continue
+            return None
         q = quality(frame)
-        motion = movement(cap, t, frame, duration) if ACTION else 0
-        # Bonus acotado: el movimiento ayuda pero no vence a una imagen borrosa.
+        motion = movement(cap, t, frame, duration) if ACTION else 0.0
+        # El movimiento es una pista, no equivale a reconocer trabajadores.
         score = q + min(35.0, motion * 2.0) if ACTION else q
-        if best is None or score > best[0]:
-            best = (score, t, q, motion)
+        return (score, t, q, motion)
+
+    def scan(lo, hi, samples):
+        candidates = []
+        for i in range(samples):
+            t = duration * (lo + (hi - lo) * i / max(1, samples - 1))
+            t = min(max(0.0, t), max(0.0, duration - .06))
+            candidate = choose_candidate(t)
+            if candidate is not None:
+                candidates.append(candidate)
+        return max(candidates, key=lambda item: item[0]) if candidates else None
+
+    # Regla universal: primero evaluar tramo inicial, sin segundos fijos.
+    # Si su calidad es aceptable, el inicio gana frente a tramos posteriores.
+    if PREFER_EARLY:
+        early = scan(EARLY_FROM, EARLY_TO, EARLY_SAMPLES)
+        if early is not None and early[2] >= MIN_EARLY_QUALITY:
+            best = early
+            print(f"SELECCIÓN | INICIO PREFERENTE {EARLY_FROM:.0%}-{EARLY_TO:.0%}")
+        else:
+            print("SELECCIÓN | respaldo por calidad inicial insuficiente")
+    if best is None:
+        best = scan(.05, .95, BACKUP_SAMPLES)
     cap.release()
     if best is None:
         fail("no se encontraron fotogramas válidos")
