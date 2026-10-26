@@ -7,6 +7,7 @@ on:
     paths:
       - 'Plantilla_Facebook_Video/videos/**'
       - 'Plantilla_Facebook_Video/imagenes/pagina_01.png'
+      - 'Plantilla_Facebook_Video/assets/portada-personalizada.png'
       - 'Plantilla_Facebook_Video/config.js'
       - 'Plantilla_Facebook_Video/generar_portada_social.py'
       - '.github/workflows/generar-portada-social.yml'
