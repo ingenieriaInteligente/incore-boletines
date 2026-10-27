@@ -4,7 +4,7 @@
  const tag=$('tag');if(tag)tag.textContent='BOLETÍN TÉCNICO INCORE';
  const sign=$('firma');if(sign){sign.querySelector('strong').textContent=[c.firma.tratamiento,c.firma.nombre].filter(Boolean).join(' ');sign.querySelector('span').textContent=c.firma.credencial;}
  const state=document.body.dataset.state;
- if(state==='portada'){const img=$('coverImg');img.src=c.portadaSocial.modo==='PERSONALIZADA'?c.portadaSocial.imagenPersonalizada:c.portadaSocial.base;img.onerror=()=>{img.src=c.portadaSocial.imagen;};setTitle($('coverTitle'),c.titulo,c.tituloResaltado);$('playIcon').hidden=c.portadaSocial.mostrarPlay===false;$('coverClick').addEventListener('click',()=>{sessionStorage.setItem('incorePlayDesdePortada','1');location.href='video.html';});}
+ if(state==='portada'){const img=$('coverImg');img.src=c.portadaSocial.modo==='PERSONALIZADA'?c.portadaSocial.imagenPersonalizada:c.portadaSocial.base;img.onerror=()=>{img.src=c.portadaSocial.imagen;};const thumb=$('coverThumb');if(thumb){const scale=Number(c.portadaSocial?.miniaturaEscala);thumb.style.setProperty('--incore-thumb-scale',String(Number.isFinite(scale)?Math.max(0.7,Math.min(1.3,scale)):1.24));const src=c.portadaSocial?.miniaturaBoletin;if(src){thumb.src=src;thumb.hidden=false;thumb.onerror=()=>{thumb.hidden=true;};}}setTitle($('coverTitle'),c.titulo,c.tituloResaltado);$('playIcon').hidden=c.portadaSocial.mostrarPlay===false;$('coverClick').addEventListener('click',()=>{sessionStorage.setItem('incorePlayDesdePortada','1');location.href='video.html';});}
  if(state==='video'){
   const v=$('video'), status=$('videoStatus');
   const setStatus=(message)=>{status.textContent=message;status.hidden=!message;};
