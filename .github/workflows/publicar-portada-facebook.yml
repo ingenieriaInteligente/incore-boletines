@@ -1,0 +1,92 @@
+name: "INCORE | Portada Facebook · preparar o publicar"
+
+on:
+  workflow_dispatch:
+    inputs:
+      accion:
+        description: "Primero PREPARAR; PUBLICAR solo tras revisar el artefacto"
+        required: true
+        default: "PREPARAR"
+        type: choice
+        options:
+          - PREPARAR
+          - PUBLICAR
+      confirmacion:
+        description: "Para PUBLICAR escribe exactamente PUBLICAR; para PREPARAR dejar vacío"
+        required: false
+        type: string
+      texto:
+        description: "Texto de la publicación (opcional); el enlace se añade automáticamente"
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: incore-facebook-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  portada-facebook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PROJECT: Plantilla_Facebook_Video
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias del generador
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install opencv-python-headless pillow requests
+
+      - name: Generar portada social 4:5
+        working-directory: ${{ env.PROJECT }}
+        run: python generar_portada_social.py
+
+      - name: Comprobar entregables
+        working-directory: ${{ env.PROJECT }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          p=Path('assets/portada-social-facebook.png')
+          assert p.is_file(), 'FAIL portada inexistente'
+          with Image.open(p) as im:
+              assert im.size == (1080, 1350), 'FAIL dimensiones 4:5'
+          assert Path('compartir.html').is_file(), 'FAIL compartir.html'
+          print('PASS | foto 1080x1350 y compartir.html disponibles')
+          PY
+
+      - name: Entregar imagen para revisión
+        uses: actions/upload-artifact@v4
+        with:
+          name: INCORE-Portada-Facebook-Revision
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            Plantilla_Facebook_Video/assets/portada-social-facebook.png
+            Plantilla_Facebook_Video/compartir.html
+
+      - name: Bloquear publicación no confirmada
+        if: ${{ inputs.accion == 'PUBLICAR' && inputs.confirmacion != 'PUBLICAR' }}
+        run: |
+          echo 'FAIL: para publicar, confirmar escribiendo PUBLICAR.'
+          exit 1
+
+      - name: Publicar fotografía en Página de Facebook
+        if: ${{ inputs.accion == 'PUBLICAR' && inputs.confirmacion == 'PUBLICAR' }}
+        working-directory: ${{ env.PROJECT }}
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_ACCESS_TOKEN: ${{ secrets.FB_PAGE_ACCESS_TOKEN }}
+          FB_PUBLICACION_TEXTO: ${{ inputs.texto }}
+          CONFIRMAR_PUBLICACION: ${{ inputs.confirmacion }}
+        run: python publicar_facebook.py
