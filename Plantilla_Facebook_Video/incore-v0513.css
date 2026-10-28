@@ -1,0 +1,10 @@
+/* INCORE v0.5.13 — extensión CSS aislada */
+.incore-acciones-boletin{width:min(100%,520px);margin:10px auto 0;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.incore-accion{min-width:92px;text-align:center;font-size:13px;min-height:38px}
+.incore-acciones-boletin [hidden]{display:none!important}
+.incore-cierre{width:min(100%,520px);margin:16px auto 3px;padding:14px 14px 12px;text-align:center;border-top:1px solid #34546d;background:linear-gradient(180deg,rgba(10,47,90,.35),transparent);border-radius:0 0 10px 10px}
+.incore-cierre p{margin:0 0 5px;color:#f4f8ff;font-weight:750;line-height:1.3;letter-spacing:.025em;font-size:clamp(12px,2.9vw,16px)}
+.incore-cierre p:last-child{margin-bottom:0}
+@media(max-width:550px){.incore-acciones-boletin{gap:6px}.incore-accion{flex:1 1 27%;min-width:0;padding:9px 5px;font-size:12px;white-space:nowrap}.incore-cierre{margin-top:14px;padding:14px 9px}}
+
+.incore-cierre .incore-frase-resaltada{color:#00AAFA}
